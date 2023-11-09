@@ -1,99 +1,102 @@
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 import java.util.Scanner;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class Main {
-    public static void main(String[] args) {
 
-        HashMap<String, String> map = new HashMap<String, String>();
-        HashMap<Integer, String> poisk = new HashMap<Integer, String>();
+    static String[] romanArr = new String[]{"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI",
+            "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV",
+            "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI",
+            "XXXVII", "XXXVIII", "XXXIX", "XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII",
+            "XLIX", "L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX", "LX", "LXI", "LXII",
+            "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX", "LXX", "LXXI", "LXXII", "LXXIII", "LXXIV",
+            "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX", "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV",
+            "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC", "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI", "XCVII",
+            "XCVIII", "XCIX", "C"};
 
-        map.put("O", "0 r");
-        map.put("I", "1 r");
-        map.put("II","2 r");
-        map.put("III","3 r");
-        map.put("IV","4 r");
-        map.put("V","5 r");
-        map.put("VI","6 r");
-        map.put("VII","7 r");
-        map.put("VIII","8 r");
-        map.put("IX","9 r");
-        map.put("X","10 r");
 
-        map.put("0","0 a");
-        map.put("1","1 a");
-        map.put("2","2 a");
-        map.put("3","3 a");
-        map.put("4","4 a");
-        map.put("5","5 a");
-        map.put("6","6 a");
-        map.put("7","7 a");
-        map.put("8","8 a");
-        map.put("9","9 a");
-        map.put("10","10 a");
-
-        poisk.put(0,"O");
-        poisk.put(1,"I");
-        poisk.put(2,"II");
-        poisk.put(3,"III");
-        poisk.put(4,"IV");
-        poisk.put(5,"V");
-        poisk.put(6,"VI");
-        poisk.put(7,"VII");
-        poisk.put(8,"VIII");
-        poisk.put(9,"IX");
-        poisk.put(10,"X");
-        poisk.put(11,"XI");
-        poisk.put(12,"XII");
-        poisk.put(13,"XIII");
-        poisk.put(14,"XIV");
-        poisk.put(15,"XV");
-        poisk.put(16,"XVI");
-        poisk.put(17,"XVII");
-        poisk.put(18,"XVIII");
-        poisk.put(19,"XIX");
-        poisk.put(20,"XX");
-
-        String znak;
-        int znak_1;
-        int znak_2;
-        int res = 0;
+    public static void main(String[] args) throws Exception {
 
         Scanner in = new Scanner(System.in);
         String stroka = in.nextLine();
-        String[] vse = stroka.split(" ");
-        znak = vse[1];
+        System.out.println(calc(stroka));
+    }
+    public static int translateRim(String number){
+        for (int i = 0; i < romanArr.length; i++) {
+            if (number.equals(romanArr[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public static boolean checkRim(String number) {
+        for (String s : romanArr) {
+            if (number.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-        String[] number1 = map.get(vse[0]).split(" ");
-        String[] number2 = map.get(vse[2]).split(" ");
-        znak_1 = Integer.parseInt(number1[0]);
-        znak_2 = Integer.parseInt(number2[0]);
+    public static String calc(String input) {
+        boolean rim1;
+        boolean rim2;
 
-        if ((znak_1 < 10 | znak_2 < 10) & ((number1[1].equals("r") & number2[1].equals("r")) | number1[1].equals("a") & number2[1].equals("a")) & vse.length == 3) {
-            if (znak.equals("+")) {
-                res = znak_1 + znak_2;
-            } else if (znak.equals("/")) {
-                res = znak_1 / znak_2;
-            } else if (znak.equals("-")) {
-                res = znak_1 - znak_2;
-            } else if (znak.equals("*")) {
-                res = znak_1 * znak_2;
+        int number1;
+        int number2;
+        int res;
+        String result;
+
+
+        String[] vse = input.split(" ");
+
+        if (vse.length != 3) throw new IllegalArgumentException("Exception");
+
+        rim1 = checkRim(vse[0]);
+        rim2 = checkRim(vse[2]);
+
+        if (rim1 != rim2) {
+            throw new IllegalArgumentException("Exception");
+        }
+
+        if (rim1) {
+            number1 = translateRim(vse[0]);
+            number2 = translateRim(vse[2]);
+            if (number1 > 10 & number2 > 10) throw new IllegalArgumentException("Exception");
+
+
+            switch (vse[1]) {
+                case "+" -> res = number1 + number2;
+                case "-" -> res = number1 - number2;
+                case "*" -> res = number1 * number2;
+                case "/" -> res = number1 / number2;
+                default -> throw new IllegalArgumentException("Exception");
             }
 
-                // Press Shift+F9 to start debugging your code. We have set one breakpoint
-                // for you, but you can always add more by pressing Ctrl+F8.
+
+            if (res <= 0) throw new IllegalArgumentException("Exception");
+
+            return (romanArr[res]);
+
         } else {
-            throw new IllegalArgumentException("Exception");
+
+            number1 = Integer.parseInt(vse[0]);
+            number2 = Integer.parseInt(vse[2]);
+            if (number1 > 10 & number2 > 10) throw new IllegalArgumentException("Exception");
+
+            switch (vse[1]) {
+                case "+" -> res = number1 + number2;
+                case "-" -> res = number1 - number2;
+                case "*" -> res = number1 * number2;
+                case "/" -> res = number1 / number2;
+                default -> throw new IllegalArgumentException("Exception");
+
+            }
+            result = String.valueOf(res);
+            return result;
 
         }
-        if (number1[1].equals("r")) {
-            if (res < 0) {
-                throw new IllegalArgumentException("Exception");
-            } else {
-                System.out.println(poisk.get(res));
-            }
-        } else System.out.println(res);
     }
 }
+
